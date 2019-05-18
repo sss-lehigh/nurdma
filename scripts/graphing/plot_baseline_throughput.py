@@ -6,7 +6,7 @@ import re
 
 from matplotlib.font_manager import FontProperties
 
-import scripts.graphing.graph_utils as utils
+import graph_utils as utils
 
 
 def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_label_map, cread_data, cwrite_data, numa_zone):
@@ -46,7 +46,7 @@ def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_l
     box = ax.get_position()
     ax.set_position([box.x0, box.y0*2, box.width, box.height * 0.7])
 
-    plt.legend(["RDMA-local reads", "RDMA-local writes", "RDMA-remote reads", "RDMA-local writes"], loc='upper center', ncol=4, bbox_to_anchor=(0.5, 1.4), fontsize=16)
+    plt.legend(["RDMA-local reads", "RDMA-local writes", "RDMA-remote reads", "RDMA-remote writes"], loc='upper center', ncol=4, bbox_to_anchor=(0.5, 1.4), fontsize=16)
     # plt.show()
     plt.savefig("baseline_throughput.pdf", dpi=300)
 

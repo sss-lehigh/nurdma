@@ -14,6 +14,7 @@
 
 class rc_resources {
 public:
+
     rc_resources();
     void initOpenClosed(size_t n_machines, size_t n_workers, const char *rqstd_servername, size_t n_clients,
                             const char *rqstd_dev_name, int rqstd_ib_port, size_t rqstd_obj_size, size_t rqstd_buf_size,
@@ -25,14 +26,10 @@ public:
     bool isClient();
 
     // openloop and closeloop benchmark
-    void client_openloop(int client_id, int iters, int postlist, int sendbatch, int mode, int think);
+    void client_openloop(int client_id, int iters, int postlist, int sendbatch, int mode, int think, float write_ratio);
     void poll_cq(int client_id, int iters, int sendbatch);
-    std::vector<double> client_closedloop(int client_id, int iters, int postlist, int sendbatch, int mode, int think);
-    void worker(int worker_id, int mode, int think, int timeout);
-
-    // delivery benchmark
-    void client_delivery(int client_id, int iters);
-    void server_delivery(int server_id, int iters);
+    std::vector<double> client_closedloop(int client_id, int iters, int postlist, int sendbatch, int mode, int think, float write_ratio);
+    void worker(int worker_id, int mode, int think, int timeout, float write_ratio);
 
     int connectQPs();
     bool syncSocket();
@@ -40,6 +37,11 @@ public:
     void printShmemBuf();
     void checkNumaLocality();
     void flushShmemBuf();
+
+    void start();
+    void reinitClientBarrier(int count);
+    void clientWait();
+    void workerWait();
 
     ~rc_resources();
 private:
@@ -66,7 +68,12 @@ private:
     unsigned char *shmem_buf;
     std::vector<bool*> client_flags;
     std::vector<bool*> worker_flags;
-    std::vector<int> worker_rands;
+    std::vector<std::vector<int>*> client_rands; 
+    std::vector<std::vector<int>*> worker_rands; 
+
+    pthread_barrier_t client_barrier;
+    pthread_barrier_t worker_barrier;
+    std::atomic<bool>* go;
 
     bool check_atomic_suport();
 

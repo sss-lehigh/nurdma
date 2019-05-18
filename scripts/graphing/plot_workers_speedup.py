@@ -6,7 +6,7 @@ import re
 
 from matplotlib.font_manager import FontProperties
 
-import scripts.graphing.graph_utils as utils
+import graph_utils as utils
 
 
 def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_label_map, cread_data, cwrite_data, numa_zone):
@@ -31,7 +31,7 @@ def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_l
         position += 1
         print(str(cread_speedup) + ', ' + str(cwrite_speedup))
 
-    labels = [0, 1, 2, 4, 8, 16]#, 24, 32, 48]
+    labels = [0, 1, 2, 4, 8, 16, 24, 32, 48]
     fontP = FontProperties()
     fontP.set_size('large')
     plt.xlabel('# worker threads', fontsize=32)
@@ -53,7 +53,7 @@ def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_l
     # plt.legend(["RDMA reads", "RDMA writes"], loc='upper center', ncol=4, bbox_to_anchor=(0.5, 1.25), fontsize=20)
     plt.hlines(0,xmin=-.25, xmax=len(labels)-.25, linewidth=3, label=None)
     # plt.show()
-    plt.savefig("workers_xfour.pdf", dpi=300)
+    plt.savefig("workers_xthree.pdf", dpi=300)
 
 if __name__ == "__main__":
     # get arguments

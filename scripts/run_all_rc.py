@@ -1,7 +1,7 @@
 import os
 from time import sleep
 
-from scripts.run_rc_bench import run_rc_bench
+from run_rc_bench import run_rc_bench
 import argparse
 
 if __name__ == "__main__":
@@ -33,9 +33,10 @@ if __name__ == "__main__":
     results_list = dir_list[:]
     if args.out_root is not None:
         for i in range(len(results_list)):
-            results_list[i] = results_list[i].replace(args.root, args.out_root)
-            # r = results_list[i].replace(args.root, '')
-            # results_list[i] = os.path.join(args.out_root, r)
+            # results_list[i] = results_list[i].replace(args.root, args.out_root)
+            r = results_list[i].replace(args.root+('/' if args.root[-1] != '/' else ''), '')
+            print("out_root: " + args.out_root + ", path: " + os.path.join(args.out_root, r))
+            results_list[i] = os.path.join(args.out_root, r)
             os.makedirs(results_list[i], exist_ok=True)
     else:
         for r in results_list:

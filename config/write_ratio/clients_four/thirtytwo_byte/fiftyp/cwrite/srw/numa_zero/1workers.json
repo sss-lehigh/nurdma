@@ -1,0 +1,20 @@
+{
+  "experiment" : "open",
+  "tcp_port" : 18018,
+  "ib_dev" : "",
+  "ib_port" : 1,
+  "gid_idx" : -1,
+  "numa" : 0,
+  "think" : 0,
+  "client_mode" : 1,
+  "num_clients" : 4,
+  "obj_size" : 32,
+  "buf_size" : 0,
+  "iters" : 1000000,
+  "postlist" : 1,
+  "sendbatch" : 1,
+  "worker_mode" : 2,
+  "workers" : 1,
+  "timeout" : 100,
+  "write_ratio" : 0.5
+}

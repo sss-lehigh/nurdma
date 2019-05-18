@@ -6,7 +6,7 @@ import re
 
 from matplotlib.font_manager import FontProperties
 
-import scripts.graphing.graph_utils as utils
+import graph_utils as utils
 
 
 def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_label_map, cread_data, cwrite_data, numa_zone):
@@ -36,7 +36,7 @@ def plot_totals_bar(cread_file_list, cwrite_file_list, cread_label_map, cwrite_l
     fontP = FontProperties()
     fontP.set_size('large')
     plt.xlabel('# worker threads', fontsize=12)
-    plt.ylabel('Improvement over RDMA-remote', fontsize=12)
+    plt.ylabel('Throughput (tx/s)', fontsize=12)
     ax = plt.axes()
     plt.grid(True, which='major', axis='y', zorder=0)
     plt.yticks(fontsize=12)

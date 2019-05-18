@@ -5,7 +5,7 @@
   "ib_port" : 1,
   "gid_idx" : -1,
   "numa" : 0,
-  "think" : 0,
+  "think" : 10,
   "client_mode" : 0,
   "num_clients" : 16,
   "obj_size" : 8,

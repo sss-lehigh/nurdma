@@ -6,9 +6,9 @@ import re
 
 from matplotlib.font_manager import FontProperties
 
-import scripts.graphing.graph_utils as utils
+import graph_utils as utils
 
-dir = './results/load/'
+dir = './results/cache_aligned/load/ninetyp'
 xaxis = np.arange(2,10)
 xaxis = (10 ** xaxis) * 64
 
@@ -16,6 +16,7 @@ xaxis = (10 ** xaxis) * 64
 def plot_throughput(cread_file_list, cwrite_file_list, cread_data, cwrite_data, numa_zone):
     width = .2
     position = 0
+    plt.figure(figsize=(10,4))
     for cread_file, cwrite_file in zip(cread_file_list, cwrite_file_list):
         cread_tot_average = utils.get_averages(cread_data[cread_file], client=False)
         cwrite_tot_average = utils.get_averages(cwrite_data[cwrite_file], client=False)
@@ -46,12 +47,12 @@ def plot_throughput(cread_file_list, cwrite_file_list, cread_data, cwrite_data, 
     ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0))
     plt.yticks(fontsize=12)
     labels = ['None']
+    # labels.extend(['2^'+ str(x) for x in np.arange(10,21)])
     labels.extend(['10e'+ str(x) for x in np.arange(2,10)])
     ax.set_xticks(np.arange(0, len(labels)) + 3/2 * width)
     ax.set_xticklabels(labels, fontsize=12)
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width, box.height * 0.8])
-
     plt.legend(["/cread/local", "/cwrite/local", "/cread/remote", "/cwrite/remote"], loc='upper center', ncol=4, bbox_to_anchor=(0.5, 1.25), prop=fontP)
     plt.show()
 
@@ -69,22 +70,27 @@ numa_zero_cread = {}
 numa_zero_cwrite = {}
 numa_one_cread = {}
 numa_one_cwrite = {}
+# for f in result_files:
+#     if 'no_numa/'+size+'/'+clients in f:
+#         if 'cread' in f:
+#             no_numa_cread[f] = utils.parse_file(f)
+#         elif 'cwrite' in f:
+#             no_numa_cwrite[f] = utils.parse_file(f)
+#     elif 'numa_zero/'+size+'/'+clients in f:
+#         if 'cread' in f:
+#             numa_zero_cread[f] = utils.parse_file(f)
+#         elif 'cwrite' in f:
+#             numa_zero_cwrite[f] = utils.parse_file(f)
+#     elif 'numa_one/'+size+'/'+clients in f:
+#         if 'cread' in f:
+#             numa_one_cread[f] = utils.parse_file(f)
+#         elif 'cwrite' in f:
+#             numa_one_cwrite[f] = utils.parse_file(f)
 for f in result_files:
-    if 'no_numa/'+size+'/'+clients in f:
-        if 'cread' in f:
-            no_numa_cread[f] = utils.parse_file(f)
-        elif 'cwrite' in f:
-            no_numa_cwrite[f] = utils.parse_file(f)
-    elif 'numa_zero/'+size+'/'+clients in f:
-        if 'cread' in f:
-            numa_zero_cread[f] = utils.parse_file(f)
-        elif 'cwrite' in f:
-            numa_zero_cwrite[f] = utils.parse_file(f)
-    elif 'numa_one/'+size+'/'+clients in f:
-        if 'cread' in f:
-            numa_one_cread[f] = utils.parse_file(f)
-        elif 'cwrite' in f:
-            numa_one_cwrite[f] = utils.parse_file(f)
+    if 'cread' in f:
+        no_numa_cread[f] = utils.parse_file(f)
+    elif 'cwrite' in f:
+        no_numa_cwrite[f] = utils.parse_file(f)
 
 
 def sort_on_load(key):
@@ -92,7 +98,7 @@ def sort_on_load(key):
     if 'numa_one/0workers.result' in key:
         numa = 1
     if 'no_load' in key:
-        return -1 * 2 - numa
+        return -1 * 2 + numa
     if 'onehundo' in key:
         return 1 * 2 + numa
     if 'onek' in key:
@@ -107,11 +113,45 @@ def sort_on_load(key):
         return 6 * 2 + numa
     if 'hundomil' in key:
         return 7 * 2 + numa
-    if 'billion' in key:
+    if 'onebil/numazero/' in key:
+        return 9 * 2 + numa
+    if 'onebil/numaone/' in key:
+        return 10 * 2 + numa
+    if 'onebil' in key:
         return 8 * 2 + numa
 
-plot_throughput(sorted(no_numa_cread.keys(), key=sort_on_load), sorted(no_numa_cwrite.keys(), key=sort_on_load), no_numa_cread,
-                no_numa_cwrite, 'numa_zero')
+def sort_on_load2(key):
+    numa = 0
+    if 'numa_one/0workers.result' in key:
+        numa = 1
+    if '/nintyp/' in key:
+        return -1 * 2 + numa
+    if '/no_load/' in key:
+        return 0 * 2 + numa
+    if '/onek/' in key:
+        return 1 * 2 + numa
+    if '/twok/' in key:
+        return 2 * 2 + numa
+    if '/fourk/' in key:
+        return 3 * 2 + numa
+    if '/eightk/' in key:
+        return 4 * 2 + numa
+    if '/sixteenk/' in key:
+        return 5 * 2 + numa
+    if '/thirtytwok/' in key:
+        return 6 * 2 + numa
+    if '/sixtyfourk/' in key:
+        return 7 * 2 + numa
+    if '/onetwentyeightk/' in key:
+        return 8 * 2 + numa 
+    if '/twofiftysixk/' in key:
+        return 9 * 2 + numa 
+    if '/fivetwelvek/' in key:
+        return 10 * 2 + numa 
+    if '/onemil/' in key:
+        return 11 * 2 + numa 
+
+plot_throughput(sorted(no_numa_cread.keys(), key=sort_on_load), sorted(no_numa_cwrite.keys(), key=sort_on_load), no_numa_cread, no_numa_cwrite, 'numa_zero')
 # plot_throughput(sorted(numa_zero_cread.keys(), key=sort_on_load), sorted(numa_zero_cwrite.keys(), key=sort_on_load), numa_zero_cread,
 #                 numa_zero_cwrite, 'numa_zero')
 # plot_throughput(sorted(numa_one_cread.keys(), key=sort_on_load), sorted(numa_one_cwrite.keys(), key=sort_on_load), numa_one_cread,

@@ -6,7 +6,7 @@ import re
 
 from matplotlib.font_manager import FontProperties
 
-import scripts.graphing.graph_utils as utils
+import graph_utils as utils
 
 dir = './results/memcached/'
 files = ['no_load', 'no_numa', 'numa_zero','numa_one']

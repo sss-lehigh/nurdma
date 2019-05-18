@@ -33,7 +33,6 @@ def parse_file(filename, filetype=0):
         line = f.readline()
         while line != "":
             c, e, t = parse_func_map[filetype](line)
-
             if c not in data:
                 data[c] = {}
             data[c][e] = t
